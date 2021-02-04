@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+  remote_user: root
+  connection: local
+  tasks:
+    - name: create directory if it isn't exist
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /etc/haproxy
+
+    - name: net.ipv4.ip_nonlocal_bind=1
+      shell:
+        cmd: echo 'net.ipv4.ip_nonlocal_bind=1' >> /etc/sysctl.conf
+
+    - name: copy edited keepalived to /usr/local/etc/sysconfig
+      copy:
+        #src: /home/mindslab/git/maum_ha/ansible/config_files/keepalived
+        src: config_files/keepalived
+        dest: /usr/local/etc/sysconfig/keepalived
+
+    - name: make haproxy.service
+      shell:
+        cmd: make
+        #chdir: /home/mindslab/git/muam_ha/ansible/HAproxy/haproxy-2.3/contrib/systemd
+        chdir: HAProxy/haproxy-2.3/contrib/systemd
+
+    - name: copy haproxy.service to /usr/lib/systemd/system
+      copy:
+        #src: /home/mindslab/git/maum_ha/ansible/HAProxy/haproxy-2.3/contrib/systemd/haproxy.service
+        src: HAProxy/haproxy-2.3/contrib/systemd/haproxy.service
+        dest: /usr/lib/systemd/system
+        mode: 0755
+
+    - name: copy haproxy.conf to /etc/rsyslog.d
+      copy:
+        #src: /home/mindslab/git/maum_ha/ansible/config_files/haproxy.conf
+        src: config_files/haproxy.conf
+        dest: /etc/rsyslog.d/haproxy.conf
+
+    - name: copy edited haproxy.cfg to /etc/haproxy
+      copy:
+        #src: /home/mindslab/git/maum_ha/ansible/config_files/haproxy.cfg
+        src: config_files/haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
+
+    - name: copy keepalived.conf to /usr/local/etc/keepalived
+      copy:
+        #src: /home/mindslab/git/maum_ha/ansible/config_files/keepalived.conf
+        src: config_files/keepalived.conf
+        dest: /usr/local/etc/keepalived

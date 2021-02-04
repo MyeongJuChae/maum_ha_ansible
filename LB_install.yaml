@@ -1,0 +1,46 @@
+---
+- hosts: localhost
+  remote_user: root
+  connection: local
+  tasks:
+    - name: install HAProxy
+      command: chdir=/home/mindslab/git/maum_ha/HAProxy rpm -ivh --force --nodeps *.rpm
+
+    #- name: build HAProxy
+    #  command: chdir=/home/mindslab/git/maum_ha/HAProxy/haproxy-2.3 make -j $(nproc) TARGET=linux-glibc USE_OPENSSL=1 USE_ZLIB=1 USE_PCRE=1 USE_SYSTEMD=1
+    
+    - name: change directory into haproxy-2.3 and build it
+      shell:
+        cmd: make -j $(nproc) TARGET=linux-glibc USE_OPENSSL=1 USE_ZLIB=1 USE_PCRE=1 USE_SYSTEMD=1
+        #chdir: /home/mindslab/git/maum_ha/HAProxy/haproxy-2.3
+        chdir: HAProxy/haproxy-2.3
+
+    - name: make HAProxy
+      #command: chdir=/home/mindslab/git/maum_ha/HAProxy/haproxy-2.3 sudo make install
+      shell:
+        cmd: make install
+        #chdir: /home/mindslab/git/maum_ha/HAProxy/haproxy-2.3
+        chdir: HAProxy/haproxy-2.3
+
+    - name: install Keepalived
+      #command: chdir=/home/mindslab/git/maum_ha/Keepalived rpm -ivh --force --nodeps *.rpm
+      command: chdir=Keepalived rpm -ivh --force --nodeps *.rpm
+
+    - name: build Keepalived
+      #command: chdir=/home/mindslab/git/maum_ha/Keepalived/keepalived ./build_setup
+      command: chdir=Keepalived/keepalived ./build_setup
+
+    - name: configure Keepalived
+      #command: chdir=/home/mindslab/git/maum_ha/Keepalived/keepalived ./configure
+      command: chdir=Keepalived/keepalived ./configure
+
+    - name: make Keepalived
+      #command: chdir=/home/mindslab/git/maum_ha/Keepalived/keepalived make
+      command: chdir=Keepalived/keepalived make
+
+    - name: make install Keepalived
+      #command: chdir=/home/mindslab/git/maum_ha/Keepalived/keepalived sudo make install
+      shell:
+        cmd: make install
+        #chdir: /home/mindslab/git/maum_ha/Keepalived/keepalived
+        chdir: Keepalived/keepalived
