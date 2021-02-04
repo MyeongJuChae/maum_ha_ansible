@@ -1,5 +1,6 @@
 # maum_ha_ansible
-ansible automation setting for maum_ha
+***
+##ansible automation setting for maum_ha
 
 rpm -Uvh epel-release*rpm
 
