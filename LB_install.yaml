@@ -4,7 +4,8 @@
   connection: local
   tasks:
     - name: install HAProxy
-      command: chdir=/home/mindslab/git/maum_ha/HAProxy rpm -ivh --force --nodeps *.rpm
+      #command: chdir=/home/mindslab/git/maum_ha/HAProxy rpm -ivh --force --nodeps *.rpm
+      command: chdir=/HAProxy rpm -ivh --force --nodeps *.rpm
 
     #- name: build HAProxy
     #  command: chdir=/home/mindslab/git/maum_ha/HAProxy/haproxy-2.3 make -j $(nproc) TARGET=linux-glibc USE_OPENSSL=1 USE_ZLIB=1 USE_PCRE=1 USE_SYSTEMD=1
